@@ -1,4 +1,4 @@
-module YaLuani.AST
+module YaLuani.Language.AST
 
 type Chunk = 
   | CBlock of block:Block
@@ -33,8 +33,7 @@ and Var =
 
 and Expression = 
   | ENil
-  | ETrue
-  | EFalse
+  | EBool of bool
   | ENumeral of num:double
   | EString of str:string
   | EFuncDef of funcDef:FunctionDefinition
