@@ -4,15 +4,25 @@ type Chunk =
   | CBlock of block:Block
 
 and Block =
-  | VoidBlock of statements:Statement list
-  | ReturnBlock of statements:Statement list * returnStatement:ReturnStatement
+  | Block of statements:Statement list * returnStatement:ReturnStatement option
 
 and Statement = 
-  | Stub
+  | SNoOp
+  | SAssignment of varList:Var list * exprList:Expression list
+  | SFuncCall of funcCall:FunctionCall
+  | SBreak
+  | SBlock of block:Block
+  | SWhile of whileExpr:Expression * whileBlock:Block
+  | SRepeat of repeatBlock:Block * repeatExpr:Expression
+  | CIfElse of ifPart:ConditionalBlock * elseIfParts:ConditionalBlock list * elsePart:Block option
+
+and ConditionalBlock = {
+  Cond:Expression
+  Block:Block
+}
 
 and ReturnStatement =
-  | ReturnVoid
-  | ReturnValues of returnValues:Expression list
+  | Return of returnValues:Expression list
 
 and FunctionName =
   | FunctionName of funcPrefix:string list * funcName:string
@@ -27,7 +37,12 @@ and Expression =
   | EFalse
   | ENumeral of num:double
   | EString of str:string
-  //TODO
+  | EFuncDef of funcDef:FunctionDefinition
+  | EVar of var:Var
+  | EFuncCall of funcCall:FunctionCall
+  | ETableCtor of tableFields:Field list
+  | EBinaryOp of leftExpr:Expression * op:BinaryOperator * rightExpr:Expression
+  | EUnaryOp of op:UnaryOperator * unaryExpr:Expression
 
 and FunctionCall =
   | FunctionCall of funcExpr:Expression * args:Arguments
