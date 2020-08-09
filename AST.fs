@@ -1,67 +1,78 @@
 module cLua.AST
 
-type Block =
+type Chunk = 
+  | CBlock of block:Block
+
+and Block =
   | VoidBlock of statements:Statement list
-  | ReturnBlock of statements:Statement list * lastStatement:LastStatement
+  | ReturnBlock of statements:Statement list * returnStatement:ReturnStatement
 
 and Statement = 
   | Stub
 
-and LastStatement =
-  | Break
+and ReturnStatement =
   | ReturnVoid
-  | ReturnValues of returnValues:ExpressionList
+  | ReturnValues of returnValues:Expression list
 
 and FunctionName =
-  | Stub
-
-and VarList =
-  | Stub
+  | FunctionName of funcPrefix:string list * funcName:string
 
 and Var = 
-  | Stub
-
-and NameList = 
-  | Stub
-
-and ExpressionList = 
-  | Stub
+  | SimpleVar of name:string
+  | IndexVar of tableExpr:Expression * indexExpr:Expression
 
 and Expression = 
-  | Stub
-
-and PrefixExpression =
-  | Stub
+  | ENil
+  | ETrue
+  | EFalse
+  | ENumeral of num:double
+  | EString of str:string
+  //TODO
 
 and FunctionCall =
-  | Stub
+  | FunctionCall of funcExpr:Expression * args:Arguments
+  | MethodCall of objExpr:Expression * methodName:string * args:Arguments
 
 and Arguments = 
-  | Stub
+  | ExpListArgs of args:Expression list
+  | TableArgs of table:Field list
 
-and Function = 
-  | Stub
-
-and FunctionBody = 
-  | Stub
+and FunctionDefinition = 
+  | FunctionDefinition of parameters:ParameterList * body:Block
 
 and ParameterList =
-  | Stub
-
-and TableConstructor =
-  | Stub
-
-and FieldList = 
-  | Stub
+  | Params of names:string list
+  | ParamsWithCatchAll of names:string list
 
 and Field = 
-  | Stub
-
-and FieldSeparator = 
-  | Stub
+  | TableField of indexExpr:Expression * valueExpr:Expression
+  | ArrayField of expr:Expression
 
 and BinaryOperator = 
-  | Stub
+  | BPlus
+  | BMinus
+  | BMult
+  | BDivFloat
+  | BDivFloor
+  | BExp
+  | BModulo
+  | BBitwiseAnd
+  | BBitwiseXOr
+  | BBiwiseOr
+  | BRightShift
+  | BLeftShift
+  | BConcat
+  | BLessThan
+  | BLessOrEqual
+  | BGreaterThan
+  | BGreaterOrEqual
+  | BEqual
+  | BNotEqual
+  | BAnd
+  | BOr
 
 and UnaryOperator = 
-  | Stub
+  | UMinus
+  | UNot
+  | ULength
+  | UBitwiseNot
